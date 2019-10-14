@@ -142,7 +142,7 @@ function Get-UserPath              ##Gets user's folder i.e. C:\users\user1. Thi
     $userpath = "$env:HOMEDRIVE\users\$username"
     return $userpath
 }
-   
+
 ####      ##
 ###Logging##
 function Create-Log                ##Creates a log in the "$env:SystemDrive\SCCMFiles\Logs" path
@@ -162,7 +162,7 @@ function Get-Log                   ##Used to Return log path
     $LogPath       = "$LogPath\$Application" + ".log.txt"
     return $Logpath
 }
-   
+
 function Append-Log                ##Used to append to log
                                    #Example usages:
                                    #Append-Log "Words"
@@ -321,7 +321,6 @@ function Get-ProgramWindow         ##Gets all active Program Windows,      optio
             return $titlearray
     }
    
-    
     if ($ProcessIDquery -eq "y")
     {
        
@@ -340,7 +339,7 @@ function Get-ProgramWindow         ##Gets all active Program Windows,      optio
             return $titlearray
     }
 }
- 
+
 function Filter-ProgramWindow      ##Gets Program Windows based on similar Program name
                                    #Example Usage:  Filter-ProgramWindow -ProgramTitle "Chrome"   this will return all programs with
                                    #the word Chrome in the window title
@@ -350,7 +349,7 @@ function Filter-ProgramWindow      ##Gets Program Windows based on similar Progr
     [string]$ProgramTitle
     #[string]$PIDnum
     )
- 
+
     $titlearray = Get-ProgramWindow
     foreach ($item in $titlearray)
     {      
@@ -375,7 +374,7 @@ function SendKeys-ToProgramWindow  ##Sends keystrokes to window title designated
                 $wshell.AppActivate("$programtitle")
                 $wshell.SendKeys($KeysToSend)
 }
- 
+
 ################Testing
 function Get-PSScriptExitCode
 {
