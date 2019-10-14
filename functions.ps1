@@ -53,6 +53,7 @@ function Filter-Program             ##Used to filter GUIDs based on program name
     $progra = Get-WmiObject win32_product -Filter "Name LIKE '%$FilteredProg%'"|Get-ProgramGUIDs -Verbose
     Write-Output $progra   
 }
+
 function Get-ProgramGUIDs           ##Used by calling Filter-Program, can be used alone to filter from get-wmiobject pipeline
                                     #Example of lone usage: get-wmiobject win32_product |get-programguids would return
                                     #all programs, GUIDs, and MSI locations.
@@ -68,7 +69,7 @@ function Get-ProgramGUIDs           ##Used by calling Filter-Program, can be use
        
     )
     Begin {
-        Write-Output "Processing Program Data:%60n%22
+        Write-Output "Processing Program Data:"
     }
     Process {
        
