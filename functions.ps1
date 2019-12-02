@@ -410,9 +410,36 @@ function Uninstall-MSI             ##Uninstalls an MSI based on the GUID
         Append-Log "  Uninstalling MSI package:  $name"
         $RunCommand = "msiexec"
         #$Args =  "/x $GUID REBOOT=ReallySuppress /qb"  
-        $Args =  "/x $GUID REBOOT=ReallySuppress MSIRESTARTMANAGERCONTROL=Disable /qn"  
-        
-        [diagnostics.process]::start($RunCommand, $Args).waitForExit() 
+        #$Args =  "/x $GUID REBOOT=ReallySuppress MSIRESTARTMANAGERCONTROL=Disable /qn"  
+        $argArray = @("/x $GUID REBOOT=ReallySuppress MSIRESTARTMANAGERCONTROL=Disable /qn","/x $GUID REBOOT=ReallySuppress MSIRESTARTMANAGERCONTROL=Disable /qb","/x $GUID REBOOT=ReallySuppress MSIRESTARTMANAGERCONTROL=Disable /q","/x $GUID REBOOT=ReallySuppress MSIRESTARTMANAGERCONTROL=Disable") 
+        foreach ($argument in $argArray)
+        {
+            if ($r -ne $null)
+            {
+                try 
+                {
+                    [diagnostics.process]::start($RunCommand, $argument).waitForExit()
+                    $r=get-wmiobject win32_product | where {$_.IdentifyingNumber -match $GUID}
+                }
+                catch
+                {
+                    "     $argument failed" |Append-Log
+                    $r=get-wmiobject win32_product | where {$_.IdentifyingNumber -match $GUID}
+                }
+                finally
+                {
+                    if ($r -ne $null)
+                    {
+                        "     Tried: '$argument' " |Append-Log
+                    }
+                    if ($r -eq $null)
+                    {
+                        "$name is no longer installed" |Append-Log
+                    }
+                }
+            }
+        }
+
     } else {
         Append-Log "  MSI GUID not found for removal:  $GUID"
     }
